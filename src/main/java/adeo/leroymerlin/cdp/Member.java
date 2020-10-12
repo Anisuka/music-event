@@ -21,4 +21,9 @@ public class Member {
         this.name = name;
     }
 
+    public Member(){}
+
+    public Member(String name){
+        this.name = name;
+    }
 }

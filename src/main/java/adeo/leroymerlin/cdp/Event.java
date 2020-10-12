@@ -1,19 +1,28 @@
 package adeo.leroymerlin.cdp;
 
-import javax.persistence.*;
 import java.util.Set;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.DynamicUpdate;
+
 @Entity
+@DynamicUpdate
 public class Event {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String title;
 
     private String imgUrl;
 
-    @OneToMany(fetch=FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Band> bands;
 
     private Integer nbStars;
@@ -67,4 +76,66 @@ public class Event {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public Event(Long id, String title, String imgUrl, Set<Band> bands, Integer nbStars, String comment) {
+        this.id = id;
+        this.title = title;
+        this.imgUrl = imgUrl;
+        this.bands = bands;
+        this.nbStars = nbStars;
+        this.comment = comment;
+    }
+
+    public Event() {
+    }
+
+    public static EventBuilder builder() {
+        return new EventBuilder();
+    }
+
+    public static class EventBuilder {
+
+        private Long id;
+
+        private String title;
+
+        private String imgUrl;
+
+        private Set<Band> bands;
+
+        private Integer nbStars;
+
+        private String comment;
+
+        public EventBuilder setTitle(final String title) {
+            this.title = title;
+            return this;
+        }
+
+        public EventBuilder setImgUrl(final String imgUrl) {
+            this.imgUrl = imgUrl;
+            return this;
+        }
+
+        public EventBuilder setBands(final Set<Band> bands) {
+            this.bands = bands;
+            return this;
+        }
+
+        public EventBuilder setNbStars(final Integer nbStars) {
+            this.nbStars = nbStars;
+            return this;
+        }
+
+        public EventBuilder setComment(final String comment) {
+            this.comment = comment;
+            return this;
+        }
+
+        public Event build() {
+            return new Event(id, title, imgUrl, bands, nbStars, comment);
+        }
+
+    }
+
 }
