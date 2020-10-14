@@ -54,6 +54,7 @@ public class EventServiceTest {
 
 
     @Test
+    @DisplayName("Given 2 Events in database when EventService getEvent then returns 2")
     void whenFindAllThenReturnListOfEntities() {
         Mockito.when(eventRepository.findAll()).thenReturn(Arrays.asList(springEvent, summerEvent));
         assertThat(eventService.getEvents().size()).isEqualTo(2);
@@ -61,6 +62,7 @@ public class EventServiceTest {
     }
 
     @Test
+    @DisplayName("Given 2 Events in database when EventService findById then returns event corresponding to that id")
     void whenFindByIdThenReturnOneEntity() {
         Mockito.when(eventRepository.findById(1L)).thenReturn(Optional.of(springEvent));
         assertThat(eventService.findById(1L).get()).isEqualTo(springEvent);
@@ -68,12 +70,14 @@ public class EventServiceTest {
     }
 
     @Test
+    @DisplayName("Given 2 Events in database when EventService deleteById then eventRepository deleteById is called only once")
     void whenDeleteByIdThenMethodCalledOnlyOnce() {
         eventService.deleteById(1L);
         Mockito.verify(eventRepository, Mockito.times(1)).deleteById(1L);
     }
 
     @Test
+    @DisplayName("Given 2 Events in database when EventService updateEventReview then eventRepository eventRepository is called only once")
     void whenSaveThenMethodCalledOnlyOnce() {
         eventService.updateEventReview(summerEvent);
         Mockito.verify(eventRepository, Mockito.times(1)).save(summerEvent);
