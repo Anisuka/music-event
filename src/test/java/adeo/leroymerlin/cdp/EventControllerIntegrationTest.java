@@ -1,6 +1,7 @@
 package adeo.leroymerlin.cdp;
 
 import java.util.List;
+import java.util.Random;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,29 @@ public class EventControllerIntegrationTest {
         assertThatExceptionOfType(ResourceNotFoundException.class).isThrownBy(() -> {
             eventController.updateEvent(-1L, new Event());
         });
+    }
+
+    @Test
+    @DisplayName("Given Event Controller When Delete Event By ID  Then Event no longer exists")
+    public void givenEventControllerWhenDeleteEventByIdThenEventNoLongerExists() {
+        eventController.deleteEvent(1000L);
+        assertThat(eventController.findEvents().stream().anyMatch(e -> e.getId() == 1000L)).isEqualTo(false);
+    }
+
+    @Test
+    @DisplayName("Given Event Controller When update event then Event is updated")
+    public void givenEventControllerWhenUpdateEventThenEventIsUpdated() throws ResourceNotFoundException {
+        Random random = new Random();
+        String updatedComment = random.ints(97, 122 + 1)
+                .limit(10)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+        Integer updatedNbStars = random.nextInt(6);
+        eventController.updateEvent(1000L, Event.builder().setNbStars(updatedNbStars).setComment(updatedComment).build());
+
+        assertThat(eventController.findEvents().stream().anyMatch(e -> e.getId() == 1000L
+                && updatedComment.equals(e.getComment())
+                && updatedNbStars == e.getNbStars())).isEqualTo(true);
     }
 
 }
